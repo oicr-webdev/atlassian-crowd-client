@@ -519,11 +519,12 @@ export default class CrowdClient extends CrowdApi {
        * @param {boolean=false} expand - Expand usernames to user objects
        * @param {number=0} startIndex - Index to start iterating from
        * @param {number=1000} maxResults - Maximum number of results
+       * @param {withAttributes=false} withAttributes - Return attributes in user objects
        * @return {(Promise.<string[]>|Promise.<User[]>} Resolves to a list of usernames or user objects which match the restriction
        */
-      user: (restriction, expand = false, startIndex = 0, maxResults = 1000) => {
+      user: (restriction, expand = false, startIndex = 0, maxResults = 1000, withAttributes = false) => {
         restriction = encodeURIComponent(restriction);
-        return this.request('GET', `/search?entity-type=user&restriction=${restriction}&start-index=${startIndex}&max-results=${maxResults}${expand ? '&expand=user' : ''}`)
+        return this.request('GET', `/search?entity-type=user&restriction=${restriction}&start-index=${startIndex}&max-results=${maxResults}${expand ? '&expand=user' : ''}${withAttributes ? '&expand=attributes' : ''}`)
           .then(res => expand ? res.users.map(User.fromCrowd) : res.users.map(user => user.name));
       },
 
@@ -534,11 +535,12 @@ export default class CrowdClient extends CrowdApi {
        * @param {boolean=false} expand - Expand group names to group objects
        * @param {number=0} startIndex - Index to start iterating from
        * @param {number=1000} maxResults - Maximum number of results
+       * @param {withAttributes=false} withAttributes - Return attributes in group objects
        * @return {(Promise.<string[]>|Promise.<Group[]>} Resolves to a list of group names or group objects which match the restriction
        */
-      group: (restriction, expand = false, startIndex = 0, maxResults = 1000) => {
+      group: (restriction, expand = false, startIndex = 0, maxResults = 1000, withAttributes = false) => {
         restriction = encodeURIComponent(restriction);
-        return this.request('GET', `/search?entity-type=group&restriction=${restriction}&start-index=${startIndex}&max-results=${maxResults}${expand ? '&expand=group' : ''}`)
+        return this.request('GET', `/search?entity-type=group&restriction=${restriction}&start-index=${startIndex}&max-results=${maxResults}${expand ? '&expand=group' : ''}${withAttributes ? '&expand=attributes' : ''}`)
           .then(res => expand ? res.groups.map(Group.fromCrowd) : res.groups.map(group => group.name));
       }
     };
